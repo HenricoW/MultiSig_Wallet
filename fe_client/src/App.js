@@ -14,7 +14,7 @@ function App() {
 
   useEffect(() => {
     const init = async () => {
-      const _web3 = web3obj();
+      const _web3 = await web3obj();
       const _wallet = await walletObj(_web3);
       const _accounts = await _web3.eth.getAccounts();
       const _approvers = await _wallet.methods.getApprovers().call();
