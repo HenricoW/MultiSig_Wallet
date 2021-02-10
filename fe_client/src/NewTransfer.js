@@ -15,6 +15,8 @@ const NewTransfer = ({sendTransfer}) => {
     }
 
     return (
+        <>
+        <h2>Create a Transfer</h2>
         <form onSubmit={e => handleSubmit(e)}>
             <label for="amount">Amount</label><br></br>
             <input id="amount" type="number" min="0" onChange={e => updateTransfer(e, 'amount')}></input><br></br>
@@ -22,6 +24,7 @@ const NewTransfer = ({sendTransfer}) => {
             <input id="to" type="text" onChange={e => updateTransfer(e, 'to')}></input><br></br><br></br>
             <button type="submit">Submit</button>
         </form>
+        </>
     );
 }
 
