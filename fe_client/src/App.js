@@ -19,6 +19,7 @@ function App() {
       const _accounts = await _web3.eth.getAccounts();
       const _approvers = await _wallet.methods.getApprovers().call();
       const _quorum = await _wallet.methods.quorum().call();
+      // await fetchTransfers();                                                  // look into how to implement this!!
       const _transfers = await _wallet.methods.getTransfers().call();
 
       setWeb3(_web3);
@@ -32,9 +33,27 @@ function App() {
     init();
   }, []);
 
+  const fetchTransfers = async () => {
+    const _trfs = await wallet.methods.getTransfers().call();
+    setTransfers(_trfs);
+  }
+
   const sendTransfer = async transfer => {
-    wallet.methods.createTransfer(transfer.to, transfer.amount).send({from: accounts[0], gas: '300000'})
-    .then(receipt => console.log(receipt));
+    wallet.methods.createTransfer(transfer.to, transfer.amount)
+    .send({from: accounts[0], gas: '300000'})
+    .then(async receipt => {
+      console.log(receipt);
+      await fetchTransfers();
+    });
+  }
+
+  const approveTransfer = async transferId => {
+    wallet.methods.approveTransfer(transferId)
+    .send({from: accounts[0], gas: '300000'})
+    .then(async receipt => {
+      console.log(receipt);
+      await fetchTransfers();
+    });
   }
 
   if(
@@ -55,7 +74,7 @@ function App() {
       <NewTransfer sendTransfer={sendTransfer} />
       <br></br>
       <br></br>
-      <TransferList transfers={transfers} />
+      <TransferList transfers={transfers} approveTransfer={approveTransfer} />
     </div>
   );
 }
