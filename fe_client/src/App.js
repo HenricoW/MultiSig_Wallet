@@ -43,13 +43,13 @@ function App () {
 
   window.ethereum.on('accountsChanged', accs => {
     setCurrAccount(accs[0]);
-  })
+  });
 
   const fetchTransfers = async () => {
     const _trfs = await wallet.methods.getTransfers().call();
     setTransfers(_trfs);
   }
-
+  
   const sendTransfer = async transfer => {
     getAccount();
     console.log(currAccount);
@@ -60,18 +60,29 @@ function App () {
       await fetchTransfers();
     });
   }
-
+  
   const approveTransfer = async transferId => {
     await getAccount();
     console.log('acc change ready!');
-    wallet.methods.approveTransfer(transferId)
-    .send({from: currAccount, gas: '300000'})
-    .then(async receipt => {
-      console.log(receipt);
-      await fetchTransfers();
-    });
+    const hasAppr = await wallet.methods.apprRecord(currAccount, transferId).call();
+    if(hasAppr){
+      window.alert("You have already approved this transaction");
+    }
+    else {
+      try {
+        wallet.methods.approveTransfer(transferId)
+        .send({from: currAccount, gas: '300000'})
+        .then(async receipt => {
+          console.log(receipt);
+          await fetchTransfers();
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    }
   }
 
+  
   if(
     typeof web3 === 'undefined' ||
     typeof wallet === 'undefined'||

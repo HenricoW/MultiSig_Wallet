@@ -58,7 +58,7 @@ contract Wallet {
         require(transfers[id].sent == false, "transfer already sent");
         require(apprRecord[msg.sender][id] == false, "cannot approve again"); // this line doesnt make sense
         
-        apprRecord[msg.sender][id] == true;
+        apprRecord[msg.sender][id] = true;
         transfers[id].approvals++;
         
         if(transfers[id].approvals == quorum){

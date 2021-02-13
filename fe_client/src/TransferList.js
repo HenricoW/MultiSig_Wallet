@@ -14,6 +14,7 @@ function TransferList ({transfers, approveTransfer}) {
             </tr></thead>
             <tbody>
                 {transfers.map(transfer => {
+                    const btnState = transfer.approvals >= 2 ? "disabled" : "";
                     return(
                     <tr key={transfer.id}>
                         <td>{transfer.id}</td>
@@ -21,7 +22,7 @@ function TransferList ({transfers, approveTransfer}) {
                         <td>{transfer.to}</td>
                         <td>
                             {transfer.approvals}
-                            <button onClick={() => approveTransfer(transfer.id)}>
+                            <button onClick={() => approveTransfer(transfer.id)} className={btnState}>
                                 Approve
                             </button>
                         </td>
