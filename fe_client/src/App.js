@@ -63,12 +63,12 @@ function App () {
   
   const approveTransfer = async transferId => {
     await getAccount();
-    console.log('acc change ready!');
     const hasAppr = await wallet.methods.apprRecord(currAccount, transferId).call();
     if(hasAppr){
       window.alert("You have already approved this transaction");
-    }
-    else {
+    } else if(transfers[transferId].sent){
+      window.alert("Already sent");
+    } else {
       try {
         wallet.methods.approveTransfer(transferId)
         .send({from: currAccount, gas: '300000'})
