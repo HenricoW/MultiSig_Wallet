@@ -1,2 +1,4 @@
 node_modules
 fe_client/node_modules
+addresses.txt
+.secrets.json

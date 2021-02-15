@@ -1,4 +1,10 @@
 const path = require('path');
+const provider = require('@truffle/hdwallet-provider');
+const fs = require('fs');
+
+const secrets = JSON.parse(
+  fs.readFileSync('./.secrets.json').toString().trim()
+);
 
 /**
  * Use this file to configure your truffle project. It's seeded with some
@@ -40,6 +46,15 @@ module.exports = {
   contracts_build_directory: path.join(__dirname, "fe_client/src/contracts"),
 
   networks: {
+    kovan: {
+      provider: ()  => new provider(
+        secrets.privateKeys,
+        secrets.endPoint,
+        0,
+        3
+      ),
+      network_id: 42
+    }
     // Useful for testing. The `development` name is special - truffle uses it by default
     // if it's defined here and no other network is specified at the command line.
     // You should run a client (like ganache-cli, geth or parity) in a separate terminal
